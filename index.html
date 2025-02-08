@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在流浪地球世界里你能活多久</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>在流浪地球世界里你能活多久</h1>
+        <div id="player-form">
+            <input type="text" id="player-name" placeholder="请输入玩家姓名">
+            <button id="start-game">开始游戏</button>
+        </div>
+        <div id="game-info" style="display: none;">
+            <div id="game-status">
+                <div id="round-info">
+                    <span>当前回合: <span id="current-round">1</span></span>
+                    <div class="action-buttons">
+                        <button id="show-dead-players" class="info-button">查看阵亡玩家</button>
+                        <button id="show-draw-history" class="info-button">查看抽牌记录</button>
+                        <button id="next-turn" class="info-button">下一回合</button>
+                    </div>
+                </div>
+                <div id="deck-info">
+                    <span>牌库: <span id="deck-count">0</span>张</span>
+                    <span>弃牌堆: <span id="discard-count">0</span>张</span>
+                </div>
+                <div id="players-order">
+                    <h3>游戏顺序</h3>
+                    <ul id="players-list"></ul>
+                </div>
+            </div>
+            <div class="game-content">
+                <div class="game-left">
+                    <p id="turn-info"></p>
+                    <p id="drawn-card"></p>
+                    <p id="player-cards">当前卡牌：<span id="card-list"></span></p>
+                </div>
+                <div class="game-right">
+                    <div id="card-use-history-info">
+                        <h3>用牌记录</h3>
+                        <ul id="card-use-history-list"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="game-over" style="display: none;">
+            <p id="winner-info"></p>
+            <button id="restart-game">重新开始</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
