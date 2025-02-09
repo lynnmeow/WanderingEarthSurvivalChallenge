@@ -150,7 +150,10 @@ document.getElementById('next-turn').addEventListener('click', async function() 
             const usableCards = getUsableCards(currentPlayer.cards);
             if (usableCards.length > 0) {
                 const useCard = await showCardOptions(currentPlayer);
-                if (!useCard) {
+                if (useCard === 'cancel') {
+                    // 如果点击取消，结束使用卡牌环节
+                    continueUsingCards = false;
+                } else if (!useCard) {
                     // 如果没有成功使用卡牌（比如取消选择），继续询问
                     continue;
                 }
@@ -223,6 +226,9 @@ document.getElementById('next-turn').addEventListener('click', async function() 
 
 // 处理死亡结局卡牌
 async function handleDeathCard(player, card) {
+    // 先显示抽到的卡牌
+    await showCustomAlert(`${player.name} 抽到了：${card.name}`, true, card);
+
     if (player.cards.includes('防护球')) {
         player.cards = player.cards.filter(c => c !== '防护球');
         // 将死亡结局卡放入牌库随机位置
@@ -396,7 +402,7 @@ async function showCardOptions(player) {
         const success = await useCard(player, result);
         return success;
     }
-    return false;
+    return 'cancel'; // 返回特殊值表示取消
 }
 
 // 统计卡牌数量
@@ -1166,14 +1172,13 @@ async function showCustomAlert(message, isCard = false, cardInfo = null) {
         dialog.className = 'custom-alert';
 
         if (isCard && cardInfo) {
+            const titleClass = cardInfo.type === CARD_TYPES.DEATH ? 'death-title' : '';
             dialog.innerHTML = `
                 <div class="card-alert">
-                    <div class="card-header">THE WANDERING EARTH</div>
-                    <div class="card-title">${cardInfo.name}</div>
+                    <div class="card-title ${titleClass}">${cardInfo.name}</div>
                     <div class="card-code">${cardInfo.code}</div>
                     <div class="card-effect">${cardInfo.effect}</div>
                     <div class="card-description">${cardInfo.description}</div>
-                    <div class="card-footer">在流浪地球世界里你能活多久</div>
                 </div>
                 <div class="button-container">
                     <button onclick="this.parentElement.parentElement.remove(); resolve();">确定</button>
