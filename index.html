@@ -8,12 +8,194 @@
 </head>
 <body>
     <div class="container">
-        <h1>在流浪地球世界里你能活多久</h1>
-        <div id="player-form">
-            <input type="text" id="player-name" placeholder="请输入玩家姓名">
-            <button id="start-game">开始游戏</button>
+        <div class="game-title">
+            <h1>在流浪地球世界里你能活多久</h1>
+            <div class="title-buttons" style="display: none;">
+                <button id="show-profile">个人中心</button>
+                <button id="show-leaderboard">排行榜</button>
+            </div>
         </div>
-        <div id="game-info" style="display: none;">
+        
+        <!-- 登录/注册表单 -->
+        <div id="auth-form" class="auth-container">
+            <div class="auth-box">
+                <div class="tab-container">
+                    <button class="tab-button active" data-tab="login">登录</button>
+                    <button class="tab-button" data-tab="register">注册</button>
+                </div>
+                
+                <!-- 登录表单 -->
+                <div id="login-form" class="auth-panel active">
+                    <div class="input-group">
+                        <input type="email" id="login-email" placeholder="邮箱" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="login-password" placeholder="密码" required>
+                    </div>
+                    <div class="remember-email">
+                        <input type="checkbox" id="remember-email" checked>
+                        <label for="remember-email">记住邮箱</label>
+                    </div>
+                    <button id="login-button" class="auth-button">登录</button>
+                </div>
+                
+                <!-- 注册表单 -->
+                <div id="register-form" class="auth-panel">
+                    <div class="input-group">
+                        <i class="icon-email"></i>
+                        <input type="email" id="register-email" placeholder="邮箱" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="icon-user"></i>
+                        <input type="text" id="register-nickname" placeholder="昵称" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="icon-password"></i>
+                        <input type="password" id="register-password" placeholder="密码" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="icon-password"></i>
+                        <input type="password" id="register-confirm-password" placeholder="确认密码" required>
+                    </div>
+                    <button id="register-button" class="auth-button">注册</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 游戏大厅 -->
+        <div id="game-lobby" style="display: none;">
+            <div class="user-info">
+                <span>欢迎，<span id="user-nickname"></span></span>
+            </div>
+            
+            <!-- 个人信息面板 -->
+            <div id="profile-panel" class="modal-panel" style="display: none;">
+                <div class="modal-content">
+                    <h3>个人信息</h3>
+                    <div class="profile-content">
+                        <div class="profile-header">
+                            <div class="level-badge">
+                                <span class="level-name"></span>
+                                <span class="level-number"></span>
+                            </div>
+                        </div>
+                        <div class="profile-details">
+                            <p><strong>昵称：</strong><span id="profile-nickname"></span></p>
+                            <p><strong>邮箱：</strong><span id="profile-email"></span></p>
+                            <p><strong>总分：</strong><span id="profile-score"></span></p>
+                            <p><strong>游戏局数：</strong><span id="profile-games"></span></p>
+                            <p><strong>当前等级：</strong><span id="profile-level"></span></p>
+                            <div class="level-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill"></div>
+                                </div>
+                                <span class="progress-text"></span>
+                            </div>
+                        </div>
+                        <div class="game-history">
+                            <h4>最近游戏记录</h4>
+                            <div class="history-list"></div>
+                        </div>
+                    </div>
+                    <div class="button-container">
+                        <button id="logout-button">退出登录</button>
+                        <button class="close-panel">关闭</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 排行榜面板 -->
+            <div id="leaderboard-panel" class="modal-panel" style="display: none;">
+                <div class="modal-content">
+                    <h3>玩家排行榜</h3>
+                    <div class="leaderboard-content">
+                        <div class="leaderboard-tabs">
+                            <button class="tab active" data-tab="score">总分排行</button>
+                            <button class="tab" data-tab="games">游戏局数</button>
+                        </div>
+                        <div class="leaderboard-list"></div>
+                    </div>
+                    <div class="button-container">
+                        <button class="close-panel">关闭</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lobby-buttons">
+                <button id="create-room-button">创建房间</button>
+                <button id="join-room-button">加入房间</button>
+                <button id="ai-room-button">人机对战</button>
+            </div>
+
+            <!-- 创建房间面板 -->
+            <div id="create-room-panel" class="modal-panel" style="display: none;">
+                <div class="modal-content">
+                    <h3>创建房间</h3>
+                    <input type="text" id="room-name" placeholder="房间名称">
+                    <input type="password" id="room-password" placeholder="房间密码（可选）">
+                    <div class="button-container">
+                        <button id="create-room-confirm">创建</button>
+                        <button id="create-room-cancel">取消</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 房间列表面板 -->
+            <div id="room-list-panel" class="modal-panel" style="display: none;">
+                <div class="modal-content">
+                    <h3>房间列表</h3>
+                    <div id="room-list" class="room-list"></div>
+                    <div class="button-container">
+                        <button id="refresh-room-list">刷新</button>
+                        <button id="room-list-back">返回</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 加入房间密码面板 -->
+            <div id="join-room-panel" class="modal-panel" style="display: none;">
+                <div class="modal-content">
+                    <h3>输入房间密码</h3>
+                    <input type="password" id="join-room-password" placeholder="请输入房间密码">
+                    <div class="button-container">
+                        <button id="join-room-confirm">确认</button>
+                        <button id="join-room-cancel">取消</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 人机对战面板 -->
+            <div id="ai-room-panel" class="modal-panel" style="display: none;">
+                <div class="modal-content">
+                    <h3>选择AI数量</h3>
+                    <select id="ai-count">
+                        <option value="4">4个AI</option>
+                        <option value="3">3个AI</option>
+                        <option value="2">2个AI</option>
+                        <option value="1">1个AI</option>
+                    </select>
+                    <div class="button-container">
+                        <button id="ai-room-confirm">开始游戏</button>
+                        <button id="ai-room-cancel">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 房间内界面 -->
+        <div id="room-view" style="display: none;">
+            <div class="room-info">
+                <h3>房间：<span id="current-room-name"></span></h3>
+                <div class="player-list" id="room-player-list"></div>
+                <div class="room-buttons">
+                    <button id="start-game-button">开始游戏</button>
+                    <button id="leave-room-button">离开房间</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 游戏界面 -->
+        <div id="game-view" style="display: none;">
             <div id="game-status">
                 <div id="round-info">
                     <span>当前回合: <span id="current-round">1</span></span>
@@ -46,11 +228,10 @@
                 </div>
             </div>
         </div>
-        <div id="game-over" style="display: none;">
-            <p id="winner-info"></p>
-            <button id="restart-game">重新开始</button>
-        </div>
     </div>
+
+    <script src="user.js"></script>
+    <script src="room.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
